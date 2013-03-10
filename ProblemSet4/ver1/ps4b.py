@@ -1,6 +1,13 @@
 from ps4a import *
 import time
 
+def isWordOnHand(hand, word):
+    freqDict = getFrequencyDict(word)
+    for w in freqDict.keys():
+        if hand.get(w, 0) < freqDict[w]:
+            return False
+    return True
+            
 
 #
 #
@@ -23,24 +30,24 @@ def compChooseWord(hand, wordList, n):
 
     returns: string or None
     """
-    # BEGIN PSEUDOCODE <-- Remove this comment when you code this function; do your coding within the pseudocode (leaving those comments in-place!)
     # Create a new variable to store the maximum score seen so far (initially 0)
-
+    maxScore = 0
     # Create a new variable to store the best word seen so far (initially None)  
-
+    bestWord = None
     # For each word in the wordList
-
+    for word in wordList:
         # If you can construct the word from your hand
         # (hint: you can use isValidWord, or - since you don't really need to test if the word is in the wordList - you can make a similar function that omits that test)
-
+        if True == isWordOnHand(hand, word):
             # Find out how much making that word is worth
-
+            score = getWordScore(word, n)
             # If the score for that word is higher than your best score
-
+            if maxScore < score:
                 # Update your best score, and best word accordingly
-
-
+                maxScore = score
+                bestWord = word
     # return the best word you found.
+    return bestWord
 
 
 #
@@ -65,7 +72,18 @@ def compPlayHand(hand, wordList, n):
     wordList: list (string)
     n: integer (HAND_SIZE; i.e., hand size required for additional points)
     """
-    # TO DO ... <-- Remove this comment when you code this function
+    score = 0
+    while calculateHandlen(hand) > 0:
+        print("Current Hand: "),
+        displayHand(hand)
+        word = compChooseWord(hand, wordList, n)
+        if word == None:
+            break
+        hand = updateHand(hand, word)
+        wordScore = getWordScore(word, n)
+        score += wordScore
+        print("\"" + word + "\" earned " + str(wordScore) + " points. Total: " + str(score) + " points")
+    print("Total score: " + str(score) + " points.")
     
 #
 # Problem #8: Playing a game
@@ -95,8 +113,35 @@ def playGame(wordList):
 
     wordList: list (string)
     """
-    # TO DO... <-- Remove this comment when you code this function
-    print "playGame not yet implemented." # <-- Remove this when you code this function
+    hand = {}
+    while True:
+        selection = raw_input("Enter n to deal a new hand, r to replay the last hand, or e to end game: ")
+        
+        if selection == "e":
+            break        
+        elif selection == "n" or selection == "r":
+            if selection == "r" and len(hand) == 0:
+                print("You have not played a hand yet. Please play a new hand first!")
+                continue
+            
+            who = None
+            while True:
+                who = raw_input("Enter u to have yourself play, c to have the computer play: ")
+                if who == "c" or who == "u":
+                    break;
+                else:
+                    print("Invalid command.")
+                
+            if selection == "n":
+                hand = dealHand(HAND_SIZE)
+                
+            if who == "c":
+                compPlayHand(hand, wordList, HAND_SIZE)
+            else:
+                playHand(hand, wordList, HAND_SIZE)
+        else:
+            print("Invalid command.")
+            
 
         
 #

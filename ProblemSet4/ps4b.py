@@ -2,6 +2,11 @@ from ps4a import *
 import time
 
 def isWordOnHand(hand, word):
+    """
+    Check whether word can be created from letters in hand
+
+    returns: True on success, otherwise False
+    """
     freqDict = getFrequencyDict(word)
     for w in freqDict.keys():
         if hand.get(w, 0) < freqDict[w]:

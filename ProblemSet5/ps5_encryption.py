@@ -86,7 +86,6 @@ def getStoryString():
 # (end of helper code)
 # -----------------------------------
 
-
 #
 # Problem 1: Encryption
 #
@@ -99,8 +98,21 @@ def buildCoder(shift):
     shift: 0 <= int < 26
     returns: dict
     """
-    ### TODO.
-    return "Not yet implemented." # Remove this comment when you code the function
+    result = {}
+    
+    lettersNr = len(string.ascii_lowercase)
+    i = 0
+    for s in string.ascii_lowercase:
+        result[s] = string.ascii_lowercase[(shift + i) % lettersNr]
+        i += 1
+
+    lettersNr = len(string.ascii_uppercase)
+    i = 0
+    for s in string.ascii_uppercase:
+        result[s] = string.ascii_uppercase[(shift + i) % lettersNr]
+        i += 1
+        
+    return result
 
 def applyCoder(text, coder):
     """
@@ -110,8 +122,13 @@ def applyCoder(text, coder):
     coder: dict with mappings of characters to shifted characters
     returns: text after mapping coder chars to original text
     """
-    ### TODO.
-    return "Not yet implemented." # Remove this comment when you code the function
+    coded = ""
+    for s in text:
+        if s in coder.keys():
+            coded += coder[s]
+        else:
+            coded += s
+    return coded
 
 def applyShift(text, shift):
     """
@@ -123,10 +140,8 @@ def applyShift(text, shift):
     text: string to apply the shift to
     shift: amount to shift the text (0 <= int < 26)
     returns: text after being shifted by specified amount.
-    """
-    ### TODO.
-    ### HINT: This is a wrapper function.
-    return "Not yet implemented." # Remove this comment when you code the function
+    """    
+    return applyCoder(text, buildCoder(shift))
 
 #
 # Problem 2: Decryption

@@ -153,8 +153,18 @@ def findBestShift(wordList, text):
     text: string
     returns: 0 <= int < 26
     """
-    ### TODO
-    return "Not yet implemented." # Remove this comment when you code the function
+    bestShift = 0
+    maxWords = 0
+    textList = text.split(" ")
+    for i in range(len(string.ascii_lowercase)):
+        correctWords = 0
+        for s in textList:
+            if isWord(wordList, applyShift(s, i)):
+                correctWords += 1
+        if correctWords > maxWords:
+            maxWords = correctWords
+            bestShift = i
+    return bestShift
 
 def decryptStory():
     """
@@ -165,8 +175,9 @@ def decryptStory():
 
     returns: string - story in plain text
     """
-    ### TODO.
-    return "Not yet implemented." # Remove this comment when you code the function
+    encodedStory = getStoryString()
+    decodedStory = applyShift(encodedStory, findBestShift(loadWords(), encodedStory))
+    return decodedStory
 
 #
 # Build data structures used for entire session and run encryption
